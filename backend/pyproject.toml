@@ -1,0 +1,19 @@
+[project]
+name = "desktop-companion-agent-backend"
+version = "0.0.0"
+description = "Local service boundary for Desktop Companion Agent."
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.116.0",
+  "uvicorn[standard]>=0.35.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28.0",
+  "pytest>=8.4.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

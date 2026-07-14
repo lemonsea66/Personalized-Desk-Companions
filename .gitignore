@@ -1,0 +1,55 @@
+# Node / frontend
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+backend/.venv/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Runtime data and user content
+data/
+backend/data/
+runtime/
+captures/
+screenshots/
+user-assets/
+generated-assets/
+*.sqlite3
+*.sqlite3-*
+*.db
+
+# Model weights and caches
+models/
+downloads/
+*.gguf
+*.safetensors
+*.onnx
+.cache/
+
+# Tauri build output
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+apps/desktop/src-tauri/*.sig
+apps/desktop/src-tauri/*.msi
+apps/desktop/src-tauri/*.exe
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.0.0",
+  "title": "AvatarManifest",
+  "type": "object",
+  "required": ["schema_version", "avatar_id", "version", "canvas", "layers", "actions"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "avatar_id": { "type": "string" },
+    "version": { "type": "string" },
+    "canvas": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "layers": { "type": "array", "items": { "type": "object" } },
+    "actions": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Desktop Companion Agent",
+  "version": "0.0.0",
+  "identifier": "com.desktopcompanion.agent",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Desktop Companion Agent",
+        "width": 420,
+        "height": 260,
+        "minWidth": 320,
+        "minHeight": 180,
+        "transparent": true,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "resizable": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": ["nsis"]
+  }
+}

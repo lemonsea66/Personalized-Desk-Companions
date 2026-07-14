@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.0.0",
+  "title": "HealthResponse",
+  "type": "object",
+  "required": ["status", "service", "version", "schema_version"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "status": { "const": "ok" },
+    "service": { "type": "string" },
+    "version": { "type": "string" },
+    "runtime": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

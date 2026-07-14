@@ -1,0 +1,16 @@
+{
+  "name": "desktop-companion-agent",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "apps/desktop",
+    "packages/shared-types"
+  ],
+  "scripts": {
+    "check:contracts": "node scripts/check_contracts.mjs",
+    "check:frontend": "node scripts/check_frontend.mjs",
+    "dev": "npm --workspace apps/desktop run dev",
+    "build": "npm --workspace apps/desktop run build"
+  }
+}
