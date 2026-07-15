@@ -6,6 +6,7 @@ import { PNG } from "pngjs";
 const outputDir = path.dirname(fileURLToPath(import.meta.url));
 const size = 320;
 const sourceFile = path.join(outputDir, "source-gpt2-transparent.png");
+const sleepingSourceFile = path.join(outputDir, "source-gpt2-sleeping-transparent.png");
 
 function blank() {
   return new PNG({ width: size, height: size, colorType: 6 });
@@ -107,6 +108,7 @@ function save(name, draw) {
 }
 
 const source = PNG.sync.read(fs.readFileSync(sourceFile));
+const sleepingSource = PNG.sync.read(fs.readFileSync(sleepingSourceFile));
 
 save("idle.png", (png) => drawSticker(png, source));
 save("blink.png", (png) => drawSticker(png, source, { scale: 0.99, offsetY: 2 }));
@@ -128,7 +130,7 @@ save("eating.png", (png) => {
   ellipse(png, 266, 253, 7, 7, [245, 196, 81, 255]);
 });
 save("sleeping.png", (png) => {
-  drawSticker(png, source, { scale: 0.94, offsetY: 12 });
+  drawSticker(png, sleepingSource, { fit: 300, offsetY: 8 });
   line(png, 236, 72, 268, 72, 7, [245, 196, 81, 245]);
   line(png, 268, 72, 238, 106, 7, [245, 196, 81, 245]);
   line(png, 238, 106, 273, 106, 7, [245, 196, 81, 245]);

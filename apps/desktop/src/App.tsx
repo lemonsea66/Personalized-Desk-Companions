@@ -3,7 +3,7 @@ import { emit, listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useMachine } from "@xstate/react";
 import { Bell, BellOff, Cookie, Heart, Images, Moon, Smile, Sun } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PetCanvas } from "./companion/PetCanvas";
 import { useAvatarStore } from "./companion/avatarStore";
@@ -118,22 +118,22 @@ function PetView() {
 
   return (
     <main className="pet-window" data-action={String(petSnapshot.value)}>
-      <div className="pet-stage">
-        <div className="status-rail" aria-label="桌宠状态">
-          <span title="心情">
-            <Smile aria-hidden="true" />
-            <b>{state?.mood ?? "--"}</b>
-          </span>
-          <span title="亲密度">
-            <Heart aria-hidden="true" />
-            <b>{state?.affection ?? "--"}</b>
-          </span>
-          <span title="饥饿">
-            <Cookie aria-hidden="true" />
-            <b>{state?.hunger ?? "--"}</b>
-          </span>
-        </div>
+      <div className="status-rail" aria-label="桌宠状态">
+        <span title="心情">
+          <Smile aria-hidden="true" />
+          <b>{state?.mood ?? "--"}</b>
+        </span>
+        <span title="亲密度">
+          <Heart aria-hidden="true" />
+          <b>{state?.affection ?? "--"}</b>
+        </span>
+        <span title="饥饿">
+          <Cookie aria-hidden="true" />
+          <b>{state?.hunger ?? "--"}</b>
+        </span>
+      </div>
 
+      <div className="pet-stage">
         <div
           className="pet-interaction-surface"
           role="button"
@@ -148,22 +148,33 @@ function PetView() {
         >
           <PetCanvas action={visibleAction} manifestUrl={selectedAvatar?.manifest_url ?? defaultManifestUrl} />
         </div>
-
-        <nav className="pet-controls" aria-label="桌宠互动">
-          <button type="button" title="喂食" aria-label="喂食" onClick={() => void feed()} disabled={!petSnapshot.can({ type: "FEED" })}>
-            <Cookie aria-hidden="true" />
-          </button>
-          <button type="button" title={petSnapshot.matches("sleeping") ? "叫醒" : "睡觉"} aria-label={petSnapshot.matches("sleeping") ? "叫醒" : "睡觉"} onClick={() => void toggleSleep()}>
-            {petSnapshot.matches("sleeping") ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
-          </button>
-          <button type="button" title={state?.quiet_mode ? "关闭安静模式" : "开启安静模式"} aria-label={state?.quiet_mode ? "关闭安静模式" : "开启安静模式"} onClick={toggleQuiet} disabled={!state}>
-            {state?.quiet_mode ? <BellOff aria-hidden="true" /> : <Bell aria-hidden="true" />}
-          </button>
-          <button type="button" title="形象库" aria-label="形象库" onClick={openAvatarLibrary}>
-            <Images aria-hidden="true" />
-          </button>
-        </nav>
       </div>
+
+      <nav className="pet-controls" aria-label="桌宠互动">
+        <button type="button" title="喂食" aria-label="喂食" onClick={() => void feed()} disabled={!petSnapshot.can({ type: "FEED" })}>
+          <Cookie aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          title={petSnapshot.matches("sleeping") ? "叫醒" : "睡觉"}
+          aria-label={petSnapshot.matches("sleeping") ? "叫醒" : "睡觉"}
+          onClick={() => void toggleSleep()}
+        >
+          {petSnapshot.matches("sleeping") ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+        </button>
+        <button
+          type="button"
+          title={state?.quiet_mode ? "关闭安静模式" : "开启安静模式"}
+          aria-label={state?.quiet_mode ? "关闭安静模式" : "开启安静模式"}
+          onClick={toggleQuiet}
+          disabled={!state}
+        >
+          {state?.quiet_mode ? <BellOff aria-hidden="true" /> : <Bell aria-hidden="true" />}
+        </button>
+        <button type="button" title="形象库" aria-label="形象库" onClick={openAvatarLibrary}>
+          <Images aria-hidden="true" />
+        </button>
+      </nav>
     </main>
   );
 }
@@ -175,13 +186,19 @@ function AvatarLibraryView() {
   const error = useAvatarStore((store) => store.error);
   const refresh = useAvatarStore((store) => store.refresh);
   const select = useAvatarStore((store) => store.select);
+  const [pendingAvatarId, setPendingAvatarId] = useState<string | null>(null);
 
   useEffect(() => {
     void refresh();
   }, [refresh]);
 
-  const chooseAvatar = async (avatarId: string) => {
-    if (await select(avatarId)) {
+  useEffect(() => {
+    if (selected) setPendingAvatarId(selected.id);
+  }, [selected]);
+
+  const applyAvatar = async () => {
+    if (!pendingAvatarId || pendingAvatarId === selected?.id) return;
+    if (await select(pendingAvatarId)) {
       if (hasTauriRuntime()) void emit(avatarChangedEvent);
     }
   };
@@ -201,14 +218,16 @@ function AvatarLibraryView() {
       <section className="avatar-grid" aria-label="可选形象">
         {(library?.avatars ?? []).map((avatar) => {
           const isSelected = avatar.id === selected?.id;
+          const isPending = avatar.id === pendingAvatarId;
           return (
             <button
               className="avatar-card"
               data-selected={isSelected}
+              data-pending={isPending}
               type="button"
               key={avatar.id}
-              onClick={() => void chooseAvatar(avatar.id)}
-              aria-pressed={isSelected}
+              onClick={() => setPendingAvatarId(avatar.id)}
+              aria-pressed={isPending}
               title={avatar.display_name}
             >
               <img src={avatar.preview_url} alt="" />
@@ -217,6 +236,12 @@ function AvatarLibraryView() {
           );
         })}
       </section>
+
+      <footer className="avatar-library-actions">
+        <button type="button" onClick={() => void applyAvatar()} disabled={!pendingAvatarId || pendingAvatarId === selected?.id}>
+          切换
+        </button>
+      </footer>
     </main>
   );
 }
