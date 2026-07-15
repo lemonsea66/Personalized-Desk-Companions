@@ -4,7 +4,7 @@ Windows-first personal desktop companion. The project is being built in bounded 
 
 ## Current Status
 
-Iteration 0 prepares the toolchain, repository structure, contracts, and health-check skeleton. It does not implement the pet interaction loop.
+Iteration 1 implements the first offline pet interaction loop: transparent layered rendering, pet/feed/sleep actions, persistent state, quiet mode, window dragging, and tray behavior. AI, personalized photo avatars, RAG, and window observation remain out of scope for this iteration.
 
 ## Repository Layout
 
@@ -27,7 +27,15 @@ npm run check:frontend
 backend\\.venv\\Scripts\\python.exe -m pytest backend/tests
 ```
 
-The backend health endpoint is intentionally minimal in Iteration 0:
+## Run the Desktop Pet
+
+```powershell
+.\\scripts\\start_dev.ps1
+```
+
+The script starts the FastAPI service on port `18082`, Vite on `1420`, and the Tauri pet window. Short-click the character to pet it; hold for at least 180ms to drag it. The icon buttons provide feed, sleep/wake, and quiet mode actions.
+
+The backend health endpoint is:
 
 ```text
 GET http://127.0.0.1:18082/health
@@ -40,4 +48,4 @@ API keys are stored through the future Windows Credential Manager integration. D
 
 ## GitHub
 
-The public repository contains core code, contracts, tests, and documentation only. A GitHub remote is added only after the repository owner provides the target URL or authenticates the GitHub CLI.
+The public repository contains core code, contracts, tests, and documentation only. The `main` branch is published at [Personalized-Desk-Companions](https://github.com/lemonsea66/Personalized-Desk-Companions).

@@ -14,14 +14,16 @@
       {
         "label": "main",
         "title": "Desktop Companion Agent",
-        "width": 420,
-        "height": 260,
+        "width": 320,
+        "height": 320,
         "minWidth": 320,
-        "minHeight": 180,
+        "minHeight": 320,
         "transparent": true,
         "decorations": false,
         "alwaysOnTop": true,
-        "resizable": false
+        "resizable": false,
+        "skipTaskbar": true,
+        "shadow": false
       }
     ],
     "security": {

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "avatar_id": "default-mochi-star",
+  "version": "1.0.0",
+  "canvas": { "width": 320, "height": 320 },
+  "collision_regions": [
+    { "id": "head", "x": 88, "y": 52, "width": 144, "height": 118 },
+    { "id": "body", "x": 64, "y": 52, "width": 192, "height": 224 }
+  ],
+  "layers": [
+    { "id": "body", "file": "body.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "eyes_open", "file": "eyes-open.png", "z": 10, "anchor": [0.5, 0.5] },
+    { "id": "eyes_closed", "file": "eyes-closed.png", "z": 10, "anchor": [0.5, 0.5] },
+    { "id": "mouth_smile", "file": "mouth-smile.png", "z": 11, "anchor": [0.5, 0.5] },
+    { "id": "mouth_angry", "file": "mouth-angry.png", "z": 11, "anchor": [0.5, 0.5] },
+    { "id": "blush", "file": "blush.png", "z": 12, "anchor": [0.5, 0.5] },
+    { "id": "food", "file": "food.png", "z": 20, "anchor": [0.5, 0.5] },
+    { "id": "heart", "file": "heart.png", "z": 20, "anchor": [0.5, 0.5] },
+    { "id": "sleep", "file": "sleep.png", "z": 20, "anchor": [0.5, 0.5] }
+  ],
+  "actions": [
+    { "id": "idle", "visible_layers": ["body", "eyes_open", "mouth_smile"] },
+    { "id": "blink", "visible_layers": ["body", "eyes_closed", "mouth_smile"] },
+    { "id": "petted", "visible_layers": ["body", "eyes_closed", "mouth_smile", "blush", "heart"] },
+    { "id": "happy", "visible_layers": ["body", "eyes_closed", "mouth_smile", "blush"] },
+    { "id": "eating", "visible_layers": ["body", "eyes_open", "mouth_smile", "food"] },
+    { "id": "sleeping", "visible_layers": ["body", "eyes_closed", "sleep"] },
+    { "id": "angry", "visible_layers": ["body", "eyes_open", "mouth_angry"] },
+    { "id": "dragging", "visible_layers": ["body", "eyes_open", "mouth_smile"] }
+  ]
+}

@@ -3,7 +3,7 @@
   "schema_version": "1.0.0",
   "title": "AvatarManifest",
   "type": "object",
-  "required": ["schema_version", "avatar_id", "version", "canvas", "layers", "actions"],
+  "required": ["schema_version", "avatar_id", "version", "canvas", "collision_regions", "layers", "actions"],
   "properties": {
     "schema_version": { "type": "string" },
     "avatar_id": { "type": "string" },
@@ -17,8 +17,52 @@
       },
       "additionalProperties": false
     },
-    "layers": { "type": "array", "items": { "type": "object" } },
-    "actions": { "type": "array", "items": { "type": "object" } }
+    "collision_regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "x", "y", "width", "height"],
+        "properties": {
+          "id": { "type": "string" },
+          "x": { "type": "number", "minimum": 0 },
+          "y": { "type": "number", "minimum": 0 },
+          "width": { "type": "number", "exclusiveMinimum": 0 },
+          "height": { "type": "number", "exclusiveMinimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "file", "z", "anchor"],
+        "properties": {
+          "id": { "type": "string" },
+          "file": { "type": "string" },
+          "z": { "type": "integer" },
+          "anchor": {
+            "type": "array",
+            "prefixItems": [{ "type": "number" }, { "type": "number" }],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "visible_layers"],
+        "properties": {
+          "id": { "type": "string" },
+          "visible_layers": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    }
   },
   "additionalProperties": false
 }

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.0.0",
+  "title": "PetInteractionEvent",
+  "type": "object",
+  "required": ["schema_version", "event_id", "type", "occurred_at", "source", "payload"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "event_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "type": {
+      "enum": [
+        "pet.petted",
+        "pet.fed",
+        "pet.quiet_mode_set",
+        "pet.sleep_requested",
+        "pet.wake_requested",
+        "pet.angry_triggered"
+      ]
+    },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "source": { "type": "string", "minLength": 1 },
+    "payload": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

@@ -2,7 +2,7 @@
 
 ## 状态
 
-待用户确认，未开始
+已完成，待用户验收
 
 ## 目标
 
@@ -22,15 +22,23 @@
 apps/desktop/src/
 apps/desktop/src-tauri/src/
 apps/desktop/src-tauri/capabilities/
+apps/desktop/src-tauri/Cargo.toml
+apps/desktop/src-tauri/Cargo.lock
 apps/desktop/src-tauri/tauri.conf.json
 apps/desktop/package.json
+apps/desktop/vite.config.ts
 backend/app/companion/
 backend/app/main.py
 backend/tests/companion/
 contracts/events/
 contracts/http/
+contracts/avatar/avatar-manifest.schema.json
 packages/shared-types/src/
 assets/pet/default/
+scripts/check_contracts.mjs
+scripts/start_dev.ps1
+package-lock.json
+README.md
 docs/iterations/ITERATION-01-pet-mvp.md
 .github/workflows/ci.yml
 ```
@@ -130,3 +138,51 @@ dragging -> dropped -> idle
 - PixiJS 资源加载失败时显示明确错误状态，不回退到有背景的图片。
 - SQLite 不可写时保持只读展示并报告错误，不在前端伪造持久化成功。
 - 托盘或窗口能力失败时回退到可见窗口和明确退出按钮，不能让进程无法关闭。
+
+## 完成记录
+
+### 实际交付
+
+- SQLite migration、`companion_state` 单例状态和幂等事件表。
+- `GET /api/v1/companion/state`、`POST /interactions`、`POST /reset`。
+- 抚摸、喂食、安静模式、睡眠/叫醒、愤怒事件和 30 分钟心情衰减。
+- XState 动作状态机、Zustand 服务端快照和 PixiJS 分层动画。
+- 原创默认角色的 9 个透明 Alpha 图层、碰撞区域和 `avatar_manifest.json`。
+- Tauri 透明置顶窗口、长按拖动、位置夹取、托盘菜单和关闭隐藏。
+- `scripts/start_dev.ps1` 一键启动 FastAPI、Vite 和 Tauri 开发链路。
+
+`imagegen` 技能已按要求检查，但当前会话没有内置图像生成工具；未擅自使用需要 API Key 的 CLI。默认角色改由仓库内确定性 PNG 生成器创建，以保证断网、可复现和真实 Alpha。
+
+### 自动验证
+
+```text
+npm run check:contracts                              PASS (7 contracts)
+npm run check:frontend                               PASS
+npm --workspace apps/desktop run assets:check        PASS (9 alpha layers)
+npm --workspace apps/desktop test                    PASS (3 tests)
+npm run build                                        PASS
+backend/.venv/Scripts/python.exe -m pytest tests     PASS (8 tests)
+cargo check --offline                                PASS
+```
+
+### 原生与视觉验证
+
+- Tauri 原生窗口实际启动，FastAPI 状态显示为已连接。
+- 400×400 物理像素（320×320 CSS，DPR 1.25）截图中角色、状态栏、三枚按钮和服务状态点完整，无重叠。
+- 短按角色：心情和亲密度各增加 1。
+- 长按 260ms 后拖动：窗口物理位置从 `(1820, 760)` 移动到 `(1730, 690)`。
+- 发送关闭请求后窗口隐藏、进程继续运行，测试结束后窗口已恢复。
+- 完整重启后 SQLite 状态、安静模式和 revision 保持一致。
+- 全新浏览器页面无 console error/warning；抚摸、喂食、安静模式、睡眠/叫醒交互通过。
+
+### 已知限制
+
+- 当前是通用默认角色，不包含照片个性化；照片转 Q 版属于 Iteration 02。
+- 托盘菜单已编译并创建，仍需用户在验收时实际右键检查四个菜单项。
+- 测试数据位于被 Git 忽略的本地 SQLite；不会上传 GitHub。
+- pytest 有一条 FastAPI/Starlette TestClient 上游弃用警告，不影响功能结果。
+
+### Git 与下一步
+
+- 实现提交在本文件提交后记录。
+- Iteration 02 不会自动开始，等待用户确认 Iteration 01 验收结果后再创建方案。

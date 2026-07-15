@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.0.0",
+  "title": "CompanionState",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "mood",
+    "hunger",
+    "energy",
+    "affection",
+    "quiet_mode",
+    "last_interaction_at",
+    "updated_at",
+    "revision"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "mood": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "hunger": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "energy": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "affection": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "quiet_mode": { "type": "boolean" },
+    "last_interaction_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "revision": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false
+}

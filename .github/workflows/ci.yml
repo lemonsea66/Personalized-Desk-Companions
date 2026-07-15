@@ -19,6 +19,8 @@ jobs:
       - run: npm ci
       - run: npm run check:contracts
       - run: npm run check:frontend
+      - run: npm --workspace apps/desktop run assets:check
+      - run: npm --workspace apps/desktop test
       - run: npm run build
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev]"
