@@ -184,5 +184,5 @@ cargo check --offline                                PASS
 
 ### Git 与下一步
 
-- 实现提交在本文件提交后记录。
+- 实现提交：`c3e2b35`（`feat(iteration-01): deliver interactive desktop pet mvp`）。
 - Iteration 02 不会自动开始，等待用户确认 Iteration 01 验收结果后再创建方案。
