@@ -3,6 +3,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.avatars.router import router as avatar_router
+from app.avatars.store import AvatarLibraryError
 from app.companion.router import router as companion_router
 from app.companion.store import CompanionError
 
@@ -28,10 +30,24 @@ app.add_middleware(
 )
 
 app.include_router(companion_router)
+app.include_router(avatar_router)
 
 
 @app.exception_handler(CompanionError)
 def companion_error_handler(_request: Request, error: CompanionError) -> JSONResponse:
+    return JSONResponse(
+        status_code=400,
+        content={
+            "schema_version": SCHEMA_VERSION,
+            "code": error.code,
+            "message": error.message,
+            "details": error.details,
+        },
+    )
+
+
+@app.exception_handler(AvatarLibraryError)
+def avatar_library_error_handler(_request: Request, error: AvatarLibraryError) -> JSONResponse:
     return JSONResponse(
         status_code=400,
         content={
@@ -64,7 +80,7 @@ def health_payload() -> dict[str, object]:
         "version": SERVICE_VERSION,
         "runtime": {
             "mode": "iteration-1",
-            "features": ["companion_state"],
+            "features": ["companion_state", "avatar_library"],
         },
     }
 

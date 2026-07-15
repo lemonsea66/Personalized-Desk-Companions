@@ -20,9 +20,14 @@ interface AvatarManifest {
 
 interface PetCanvasProps {
   action: string;
+  manifestUrl?: string;
 }
 
-export function PetCanvas({ action }: PetCanvasProps) {
+function assetBaseUrl(manifestUrl: string): string {
+  return manifestUrl.slice(0, manifestUrl.lastIndexOf("/") + 1);
+}
+
+export function PetCanvas({ action, manifestUrl = "/pet/cute-dog/avatar_manifest.json" }: PetCanvasProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef(action);
   actionRef.current = action;
@@ -52,7 +57,10 @@ export function PetCanvas({ action }: PetCanvasProps) {
 
       app.canvas.className = "pet-canvas";
       host.appendChild(app.canvas);
-      const manifest = (await fetch("/pet/default/avatar_manifest.json").then((response) => response.json())) as AvatarManifest;
+      const manifestResponse = await fetch(manifestUrl);
+      if (!manifestResponse.ok) throw new Error(`Avatar manifest failed with HTTP ${manifestResponse.status}`);
+      const manifest = (await manifestResponse.json()) as AvatarManifest;
+      const baseUrl = assetBaseUrl(manifestUrl);
       const rig = new Container();
       rig.pivot.set(manifest.canvas.width / 2, manifest.canvas.height / 2);
       rig.position.set(manifest.canvas.width / 2, manifest.canvas.height / 2);
@@ -60,7 +68,7 @@ export function PetCanvas({ action }: PetCanvasProps) {
 
       const sprites = new Map<string, Sprite>();
       for (const layer of [...manifest.layers].sort((left, right) => left.z - right.z)) {
-        const texture = await Assets.load(`/pet/default/${layer.file}`);
+        const texture = await Assets.load(`${baseUrl}${layer.file}`);
         const sprite = new Sprite(texture);
         sprite.width = manifest.canvas.width;
         sprite.height = manifest.canvas.height;
@@ -90,7 +98,7 @@ export function PetCanvas({ action }: PetCanvasProps) {
       disposed = true;
       if (initialized) app.destroy(true, { children: true, texture: false });
     };
-  }, []);
+  }, [manifestUrl]);
 
   return <div ref={hostRef} className="pet-canvas-host" aria-hidden="true" />;
 }

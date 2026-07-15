@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "avatar_id": "cute-dog",
+  "version": "1.0.1",
+  "canvas": { "width": 320, "height": 320 },
+  "collision_regions": [
+    { "id": "head", "x": 48, "y": 36, "width": 224, "height": 172 },
+    { "id": "body", "x": 76, "y": 56, "width": 176, "height": 236 }
+  ],
+  "layers": [
+    { "id": "idle_frame", "file": "idle.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "blink_frame", "file": "blink.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "petted_frame", "file": "petted.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "happy_frame", "file": "happy.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "eating_frame", "file": "eating.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "sleeping_frame", "file": "sleeping.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "angry_frame", "file": "angry.png", "z": 0, "anchor": [0.5, 0.5] },
+    { "id": "dragging_frame", "file": "dragging.png", "z": 0, "anchor": [0.5, 0.5] }
+  ],
+  "actions": [
+    { "id": "idle", "visible_layers": ["idle_frame"] },
+    { "id": "blink", "visible_layers": ["blink_frame"] },
+    { "id": "petted", "visible_layers": ["petted_frame"] },
+    { "id": "happy", "visible_layers": ["happy_frame"] },
+    { "id": "eating", "visible_layers": ["eating_frame"] },
+    { "id": "sleeping", "visible_layers": ["sleeping_frame"] },
+    { "id": "angry", "visible_layers": ["angry_frame"] },
+    { "id": "dragging", "visible_layers": ["dragging_frame"] }
+  ]
+}

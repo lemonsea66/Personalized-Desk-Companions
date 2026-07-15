@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "default_avatar_id": "cute-dog",
+  "avatars": [
+    {
+      "id": "cute-dog",
+      "display_name": "软耳小白狗",
+      "manifest_url": "/pet/cute-dog/avatar_manifest.json",
+      "preview_url": "/pet/cute-dog/preview.png",
+      "source": "builtin"
+    },
+    {
+      "id": "default-mochi-star",
+      "display_name": "星星麻薯",
+      "manifest_url": "/pet/default/avatar_manifest.json",
+      "preview_url": "/pet/default/preview.png",
+      "source": "builtin"
+    }
+  ]
+}

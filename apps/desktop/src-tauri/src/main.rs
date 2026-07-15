@@ -51,38 +51,55 @@ fn place_bottom_right(window: &WebviewWindow) -> Result<(), String> {
     )
 }
 
+fn show_avatar_library(app: &tauri::AppHandle) {
+    if let Some(window) = app.get_webview_window("avatar-library") {
+        let _ = window.show();
+        let _ = window.set_focus();
+    }
+}
+
 #[tauri::command]
 fn restore_window_position(window: WebviewWindow, x: i32, y: i32) -> Result<(), String> {
     clamp_window_position(&window, PhysicalPosition::new(x, y))
+}
+
+#[tauri::command]
+fn open_avatar_library(app: tauri::AppHandle) {
+    show_avatar_library(&app);
 }
 
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
             let toggle = MenuItem::with_id(app, "toggle", "显示/隐藏", true, None::<&str>)?;
+            let avatar_library = MenuItem::with_id(app, "avatar-library", "形象库", true, None::<&str>)?;
             let quiet = MenuItem::with_id(app, "quiet", "切换安静模式", true, None::<&str>)?;
             let reset = MenuItem::with_id(app, "reset", "重置位置", true, None::<&str>)?;
             let quit = MenuItem::with_id(app, "quit", "退出", true, None::<&str>)?;
-            let menu = Menu::with_items(app, &[&toggle, &quiet, &reset, &quit])?;
+            let menu = Menu::with_items(app, &[&toggle, &avatar_library, &quiet, &reset, &quit])?;
 
             let mut tray = TrayIconBuilder::new().menu(&menu).on_menu_event(|app, event| {
-                let Some(window) = app.get_webview_window("main") else {
-                    return;
-                };
                 match event.id().as_ref() {
                     "toggle" => {
-                        if window.is_visible().unwrap_or(false) {
-                            let _ = window.hide();
-                        } else {
-                            let _ = window.show();
-                            let _ = window.set_focus();
+                        if let Some(window) = app.get_webview_window("main") {
+                            if window.is_visible().unwrap_or(false) {
+                                let _ = window.hide();
+                            } else {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
                         }
                     }
+                    "avatar-library" => show_avatar_library(app),
                     "quiet" => {
-                        let _ = window.emit("tray-quiet-toggle", ());
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.emit("tray-quiet-toggle", ());
+                        }
                     }
                     "reset" => {
-                        let _ = place_bottom_right(&window);
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = place_bottom_right(&window);
+                        }
                     }
                     "quit" => app.exit(0),
                     _ => {}
@@ -106,7 +123,7 @@ fn main() {
             }
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![restore_window_position])
+        .invoke_handler(tauri::generate_handler![restore_window_position, open_avatar_library])
         .on_window_event(|window, event| {
             if let WindowEvent::CloseRequested { api, .. } = event {
                 api.prevent_close();

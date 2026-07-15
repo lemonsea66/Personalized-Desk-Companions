@@ -1,4 +1,7 @@
 import type {
+  AvatarLibraryResponse,
+  RegisterAvatarRequest,
+  SelectAvatarRequest,
   CompanionState,
   HealthResponse,
   PetInteractionEvent,
@@ -58,4 +61,22 @@ export async function resetCompanionState(): Promise<CompanionState> {
     method: "POST"
   });
   return response.state;
+}
+
+export function getAvatarLibrary(): Promise<AvatarLibraryResponse> {
+  return requestJson("/api/v1/avatars");
+}
+
+export function selectAvatar(request: SelectAvatarRequest): Promise<AvatarLibraryResponse> {
+  return requestJson("/api/v1/avatars/select", {
+    method: "POST",
+    body: JSON.stringify(request)
+  });
+}
+
+export function registerAvatar(request: RegisterAvatarRequest): Promise<AvatarLibraryResponse> {
+  return requestJson("/api/v1/avatars/register", {
+    method: "POST",
+    body: JSON.stringify(request)
+  });
 }

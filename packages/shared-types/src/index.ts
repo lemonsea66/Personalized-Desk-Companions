@@ -26,6 +26,28 @@ export interface AvatarManifest {
   actions: Array<Record<string, unknown>>;
 }
 
+export interface AvatarRecord {
+  id: string;
+  display_name: string;
+  manifest_url: string;
+  preview_url: string;
+  source: "builtin" | "user";
+}
+
+export interface AvatarLibraryResponse {
+  schema_version: "1.0.0";
+  selected_avatar_id: string;
+  avatars: AvatarRecord[];
+}
+
+export interface SelectAvatarRequest {
+  avatar_id: string;
+}
+
+export interface RegisterAvatarRequest extends AvatarRecord {
+  source: "user";
+}
+
 export interface SkillManifest {
   schema_version: SchemaVersion;
   id: string;

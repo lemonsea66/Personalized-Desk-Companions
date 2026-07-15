@@ -7,8 +7,8 @@
     "dev": "vite --host 127.0.0.1 --port 1420",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
-    "assets:generate": "node ../../assets/pet/default/generate-assets.mjs",
-    "assets:check": "node ../../assets/pet/default/validate-assets.mjs",
+    "assets:generate": "node ../../assets/pet/default/generate-assets.mjs && node ../../assets/pet/cute-dog/generate-assets.mjs",
+    "assets:check": "node ../../assets/pet/default/validate-assets.mjs && node ../../assets/pet/cute-dog/validate-assets.mjs",
     "tauri": "tauri"
   },
   "dependencies": {
