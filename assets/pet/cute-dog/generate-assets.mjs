@@ -100,14 +100,6 @@ function heart(target, cx, cy, scale = 1) {
   line(target, cx + 17 * scale, cy, cx, cy + 22 * scale, 16 * scale, pink);
 }
 
-function addClosedEyeHint(target) {
-  const ink = [55, 55, 55, 230];
-  line(target, 103, 129, 125, 138, 4, ink);
-  line(target, 125, 138, 147, 128, 4, ink);
-  line(target, 173, 128, 195, 138, 4, ink);
-  line(target, 195, 138, 217, 129, 4, ink);
-}
-
 function save(name, draw) {
   const frame = blank();
   draw(frame);
@@ -117,10 +109,7 @@ function save(name, draw) {
 const source = PNG.sync.read(fs.readFileSync(sourceFile));
 
 save("idle.png", (png) => drawSticker(png, source));
-save("blink.png", (png) => {
-  drawSticker(png, source);
-  addClosedEyeHint(png);
-});
+save("blink.png", (png) => drawSticker(png, source, { scale: 0.99, offsetY: 2 }));
 save("happy.png", (png) => {
   drawSticker(png, source, { scale: 1.02, offsetY: -4 });
   heart(png, 246, 54, 0.72);
@@ -143,7 +132,6 @@ save("sleeping.png", (png) => {
   line(png, 236, 72, 268, 72, 7, [245, 196, 81, 245]);
   line(png, 268, 72, 238, 106, 7, [245, 196, 81, 245]);
   line(png, 238, 106, 273, 106, 7, [245, 196, 81, 245]);
-  addClosedEyeHint(png);
 });
 save("angry.png", (png) => {
   drawSticker(png, source);

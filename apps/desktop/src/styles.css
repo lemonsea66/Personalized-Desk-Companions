@@ -85,6 +85,9 @@ button {
   background: rgba(31, 49, 57, 0.82);
   box-shadow: 0 4px 14px rgba(19, 34, 40, 0.18);
   backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
 }
 
 .status-rail span {
@@ -114,14 +117,25 @@ button {
   left: 50%;
   bottom: 7px;
   display: grid;
-  grid-template-columns: repeat(4, 36px);
+  grid-template-columns: repeat(4, 72px);
   gap: 8px;
   transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.pet-window:hover .status-rail,
+.pet-window:hover .pet-controls,
+.pet-window:focus-within .status-rail,
+.pet-window:focus-within .pet-controls {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .pet-controls button {
-  width: 36px;
-  height: 36px;
+  width: 72px;
+  height: 72px;
   display: grid;
   place-items: center;
   padding: 0;
@@ -135,7 +149,7 @@ button {
 }
 
 .pet-controls button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   background: #ffffff;
 }
 
@@ -150,8 +164,8 @@ button {
 }
 
 .pet-controls svg {
-  width: 18px;
-  height: 18px;
+  width: 36px;
+  height: 36px;
 }
 
 .avatar-library-window {
